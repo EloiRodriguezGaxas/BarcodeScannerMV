@@ -1,0 +1,25 @@
+{
+  "name": "com.example.sample.barcodeScannerMV",
+  "version": "0.0.1",
+  "description": "Barcode scanner for android",
+  "cordova": {
+    "id": "com.example.sample.barcodeScannerMV",
+    "platforms": [
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EloiRodriguezGaxas/BarcodeScannerMV.git"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "Eloi Rodriguez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EloiRodriguezGaxas/BarcodeScannerMV/issues"
+  },
+  "homepage": "https://github.com/EloiRodriguezGaxas/BarcodeScannerMV#readme"
+}
