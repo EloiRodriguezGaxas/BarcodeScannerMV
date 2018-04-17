@@ -158,7 +158,7 @@ public class CameraSource {
      * buffer.  We use byte buffers internally because this is a more efficient way to call into
      * native code later (avoids a potential copy).
      */
-    private Map<byte[], ByteBuffer> mBytesToByteBuffer = new HashMap<>();
+    private Map<byte[], ByteBuffer> mBytesToByteBuffer = new HashMap<T>();
 
     //==============================================================================================
     // Builder
@@ -909,7 +909,7 @@ public class CameraSource {
                 parameters.getSupportedPreviewSizes();
         List<android.hardware.Camera.Size> supportedPictureSizes =
                 parameters.getSupportedPictureSizes();
-        List<SizePair> validPreviewSizes = new ArrayList<>();
+        List<SizePair> validPreviewSizes = new ArrayList<T>();
         for (android.hardware.Camera.Size previewSize : supportedPreviewSizes) {
             float previewAspectRatio = (float) previewSize.width / (float) previewSize.height;
 

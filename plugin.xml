@@ -29,13 +29,19 @@
         <source-file src="src/android/ui/camera/GraphicOverlay.java" target-dir="src/com/example/sample/barcodeScannerMV/ui/camera" />
 		<source-file src="src/android/res/layout/activity_main.xml" target-dir="res/layout/activity_main.xml" />
 		<source-file src="src/android/res/layout/barcode_capture.xml" target-dir="res/layout/barcode_capture.xml" />
-        <source-file src="android/res/drawable/icon.png" target-dir="res/drawable"/>
-        <source-file src="android/res/drawable/icon.png" target-dir="res/drawable-hdpi"/>
-        <source-file src="android/res/drawable/icon.png" target-dir="res/drawable-ldpi"/>
-        <source-file src="android/res/drawable/icon.png" target-dir="res/drawable-mdpi"/>
-        <source-file src="android/res/drawable/icon.png" target-dir="res/drawable-xhdpi"/>
-        <source-file src="android/res/drawable/icon.png" target-dir="res/drawable-xxhdpi"/>
-        <source-file src="android/res/values/dimens.xml" target-dir="res/values/dimens.xml"/>
-        <source-file src="android/res/values/strings.xml" target-dir="res/values/strings.xml"/>
+        <source-file src="src/android/res/drawable/icon.png" target-dir="res/drawable"/>
+        <source-file src="src/android/res/drawable/icon.png" target-dir="res/drawable-hdpi"/>
+        <source-file src="src/android/res/drawable/icon.png" target-dir="res/drawable-ldpi"/>
+        <source-file src="src/android/res/drawable/icon.png" target-dir="res/drawable-mdpi"/>
+        <source-file src="src/android/res/drawable/icon.png" target-dir="res/drawable-xhdpi"/>
+        <source-file src="src/android/res/drawable/icon.png" target-dir="res/drawable-xxhdpi"/>
+        <source-file src="src/android/res/values/dimens.xml" target-dir="res/values/dimens.xml"/>
+        <source-file src="src/android/res/values/strings.xml" target-dir="res/values/strings.xml"/>
+
+		<framework src="com.android.support:support-v4:24.2.0" />
+		<framework src="com.google.android.gms:play-services-vision:9.4.0+" />
+		<framework src="com.android.support:design:24.2.0" />
+		<hook type="after_plugin_install" src="hooks/after_plugin_install/hook-add-r-import.js" />
+
 	</platform>
 </plugin>

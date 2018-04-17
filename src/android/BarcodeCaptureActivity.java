@@ -172,7 +172,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(context).build();
         BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(mGraphicOverlay, this);
         barcodeDetector.setProcessor(
-                new MultiProcessor.Builder<>(barcodeFactory).build());
+                new MultiProcessor.Builder<T>(barcodeFactory).build());
 
         if (!barcodeDetector.isOperational()) {
             // Note: The first time that an app using the barcode or face API is installed on a
