@@ -27,8 +27,8 @@
         <source-file src="src/android/ui/camera/CameraSource.java" target-dir="src/com/example/sample/barcodeScannerMV/ui/camera" />
         <source-file src="src/android/ui/camera/CameraSourcePreview.java" target-dir="src/com/example/sample/barcodeScannerMV/ui/camera" />
         <source-file src="src/android/ui/camera/GraphicOverlay.java" target-dir="src/com/example/sample/barcodeScannerMV/ui/camera" />
-		<source-file src="src/android/activity_main.xml" target-dir="res/layout/activity_main.xml" />
-		<source-file src="src/android/barcode_capture.xml" target-dir="res/layout/barcode_capture.xml" />
+		<source-file src="src/android/res/layout/activity_main.xml" target-dir="res/layout/activity_main.xml" />
+		<source-file src="src/android/res/layout/barcode_capture.xml" target-dir="res/layout/barcode_capture.xml" />
         <source-file src="android/res/drawable/icon.png" target-dir="res/drawable"/>
         <source-file src="android/res/drawable/icon.png" target-dir="res/drawable-hdpi"/>
         <source-file src="android/res/drawable/icon.png" target-dir="res/drawable-ldpi"/>
