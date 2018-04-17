@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin id="com.example.sample.barcodeScannerMV" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+	<name>
+		BarcodeScannerMV
+	</name>
+	<js-module name="BarcodeScannerMV" src="www/BarcodeScannerMV.js">
+		<clobbers target="cordova.plugins.BarcodeScannerMV" />
+	</js-module>
+	<platform name="android">
+		<config-file parent="/*" target="res/xml/config.xml">
+			<feature name="BarcodeScannerMV">
+				<param name="android-package" value="com.example.sample.barcodeScannerMV.BarcodeScannerMV" />
+			</feature>
+		</config-file>
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<activity android:label="New Activity" android:name="com.example.sample.barcodeScannerMV.MainActivity">
+			</activity>
+		</config-file>
+		<config-file parent="/*" target="AndroidManifest.xml">
+		</config-file>
+		<source-file src="src/android/BarcodeScannerMV.java" target-dir="src/com/example/sample/barcodeScannerMV" />
+		<source-file src="src/android/MainActivity.java" target-dir="src/com/example/sample/barcodeScannerMV" />
+        <source-file src="src/android/BarcodeCaptureActivity.java" target-dir="src/com/example/sample/barcodeScannerMV" />
+        <source-file src="src/android/BarcodeGraphic.java" target-dir="src/com/example/sample/barcodeScannerMV" />
+        <source-file src="src/android/BarcodeGraphicTracker.java" target-dir="src/com/example/sample/barcodeScannerMV" />
+        <source-file src="src/android/BarcodeTrackerFactory.java" target-dir="src/com/example/sample/barcodeScannerMV" />
+        <source-file src="src/android/ui/camera/CameraSource.java" target-dir="src/com/example/sample/barcodeScannerMV/ui/camera" />
+        <source-file src="src/android/ui/camera/CameraSourcePreview.java" target-dir="src/com/example/sample/barcodeScannerMV/ui/camera" />
+        <source-file src="src/android/ui/camera/GraphicOverlay.java" target-dir="src/com/example/sample/barcodeScannerMV/ui/camera" />
+		<source-file src="src/android/activity_main.xml" target-dir="res/layout" />
+		<source-file src="src/android/barcode_capture.xml" target-dir="res/layout" />
+		<source-file src="src/android/activity_main.xml" target-dir="res/layout" />
+        <source-file src="android/res/drawable/icon.png" target-dir="res/drawable"/>
+        <source-file src="android/res/drawable/icon.png" target-dir="res/drawable-hdpi"/>
+        <source-file src="android/res/drawable/icon.png" target-dir="res/drawable-ldpi"/>
+        <source-file src="android/res/drawable/icon.png" target-dir="res/drawable-mdpi"/>
+        <source-file src="android/res/drawable/icon.png" target-dir="res/drawable-xhdpi"/>
+        <source-file src="android/res/drawable/icon.png" target-dir="res/drawable-xxhdpi"/>
+        <source-file src="android/res/values/dimens.xml" target-dir="res/values"/>
+        <source-file src="android/res/values/strings.xml" target-dir="res/values"/>
+	</platform>
+</plugin>
