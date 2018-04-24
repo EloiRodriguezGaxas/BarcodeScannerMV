@@ -56,6 +56,8 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaWebView;
 
+import android.os.Handler;
+
 import java.io.IOException;
 
 /**
@@ -69,6 +71,8 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
 
     // intent request code to handle updating play services if needed.
     private static final int RC_HANDLE_GMS = 9001;
+
+    private boolean tapToCapture = false;
 
     // permission request codes need to be < 256
     private static final int RC_HANDLE_CAMERA_PERM = 2;
@@ -120,6 +124,22 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
+        if(!tapToCapture) {
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    
+                    int mWidth = (getApplication().getResources().getDisplayMetrics().widthPixels)/2;
+                    int mHeight = (getApplication().getResources().getDisplayMetrics().heightPixels)/2;
+
+                    checkForBarcode(mWidth, mHeight);
+
+                    handler.postDelayed(this, 500);
+
+                }
+            }, 100);
+        }
         // Snackbar.make(mGraphicOverlay, "Tap to capture. Pinch/Stretch to zoom", Snackbar.LENGTH_LONG).show();
     }
 
@@ -151,8 +171,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
                 getApplication().getResources().getIdentifier("topLayout", "id", getApplication().getPackageName()))
                         .setOnClickListener(listener);
         Snackbar.make(mGraphicOverlay, "Access to the camera is needed for detection", Snackbar.LENGTH_INDEFINITE)
-                .setAction("Ok", listener)
-                .show();
+                .setAction("Ok", listener).show();
     }
 
     @Override
@@ -202,7 +221,8 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
             boolean hasLowStorage = registerReceiver(null, lowstorageFilter) != null;
 
             if (hasLowStorage) {
-                Toast.makeText(this, "Face detector dependencies cannot be downloaded due to low device storage", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Face detector dependencies cannot be downloaded due to low device storage",
+                        Toast.LENGTH_LONG).show();
             }
         }
 
@@ -296,10 +316,9 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Multitracker sample")
-                .setMessage("This application cannot run because it does not have the camera permission.  The application will now exit.")
-                .setPositiveButton("OK", listener)
-                .show();
+        builder.setTitle("Multitracker sample").setMessage(
+                "This application cannot run because it does not have the camera permission.  The application will now exit.")
+                .setPositiveButton("OK", listener).show();
     }
 
     /**
@@ -341,12 +360,18 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
         float x = (rawX - location[0]) / mGraphicOverlay.getWidthScaleFactor();
         float y = (rawY - location[1]) / mGraphicOverlay.getHeightScaleFactor();
         Log.d(TAG, "Transformed to: (rawX) " + x + " -- (rawY) " + y);
+
+        return checkForBarcode((int) x, (int) y);
+
+    }
+
+    private boolean checkForBarcode(int x, int y) {
         // Find the barcode whose center is closest to the tapped point.
         String best = null;
         float bestDistance = Float.MAX_VALUE;
         // Barcode barcode = mGraphicOverlay.getGraphics().get(0).getBarcode();
         // best = barcode.displayValue;
-        
+
         for (BarcodeGraphic graphic : mGraphicOverlay.getGraphics()) {
             Barcode barcode = graphic.getBarcode();
             if (barcode.getBoundingBox().contains((int) x, (int) y)) {
@@ -358,13 +383,13 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
             float dx = x - barcode.getBoundingBox().centerX();
             float dy = y - barcode.getBoundingBox().centerY();
             float distance = (dx * dx) + (dy * dy); // actually squared distance
-            if (distance < bestDistance) {
-                best = barcode.displayValue;
-                Log.d(TAG, "The closest barcode now: " + best);
-                bestDistance = distance;
-            }
+            // if (distance < bestDistance) {
+            //     best = barcode.displayValue;
+            //     Log.d(TAG, "The closest barcode now: " + best);
+            //     bestDistance = distance;
+            // }
         }
-        
+
         if (best != null) {
             Intent data = new Intent();
             data.putExtra(BarcodeObject, best);
@@ -378,7 +403,10 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
     private class CaptureGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
-            return onTap(e.getRawX(), e.getRawY()) || super.onSingleTapConfirmed(e);
+            if (tapToCapture)
+                return onTap(e.getRawX(), e.getRawY()) || super.onSingleTapConfirmed(e);
+            else
+                return false;
         }
     }
 

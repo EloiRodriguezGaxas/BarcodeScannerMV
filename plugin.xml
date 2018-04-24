@@ -20,7 +20,7 @@
 			<activity 
 				android:label="Barcode activity" 
 				android:name="com.example.sample.barcodeScannerMV.BarcodeCaptureActivity" 
-				android:theme="@style/Theme.AppCompat.Light" />
+				android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 		</config-file>
 		<config-file parent="/*" target="AndroidManifest.xml">
 		    <uses-feature android:name="android.hardware.camera" />
