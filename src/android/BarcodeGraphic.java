@@ -20,7 +20,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-import com.google.android.gms.samples.vision.barcodereader.ui.camera.GraphicOverlay;
+import com.example.sample.barcodeScannerMV.ui.camera.GraphicOverlay;
 import com.google.android.gms.vision.barcode.Barcode;
 
 /**
@@ -83,7 +83,6 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
     /**
      * Draws the barcode annotations for position, size, and raw value on the supplied canvas.
      */
-    @Override
     public void draw(Canvas canvas) {
         Barcode barcode = mBarcode;
         if (barcode == null) {

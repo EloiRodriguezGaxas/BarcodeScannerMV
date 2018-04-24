@@ -20,7 +20,8 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.google.android.gms.vision.CameraSource;
+import com.example.sample.barcodeScannerMV.ui.camera.CameraSource;
+import com.example.sample.barcodeScannerMV.BarcodeGraphic;
 
 import java.util.HashSet;
 import java.util.List;
@@ -52,7 +53,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     private int mPreviewHeight;
     private float mHeightScaleFactor = 1.0f;
     private int mFacing = CameraSource.CAMERA_FACING_BACK;
-    private Set<T> mGraphics = new HashSet<T>();
+    private Set<Graphic> mGraphics = new HashSet();
 
     /**
      * Base class for a custom graphics object to be rendered within the graphic overlay.  Subclass
@@ -158,7 +159,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
      * Returns a copy (as a list) of the set of all active graphics.
      * @return list of all active graphics.
      */
-    public List<T> getGraphics() {
+    public List<BarcodeGraphic> getGraphics() {
         synchronized (mLock) {
             return new Vector(mGraphics);
         }

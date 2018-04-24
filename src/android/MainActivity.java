@@ -1,12 +1,21 @@
 package com.example.sample.barcodeScannerMV;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.app.Activity;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+
+import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaWebView;
+
+import android.content.res.Resources;
+
+import android.app.Activity;
+import android.os.Bundle;
+
+import android.Manifest;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -16,6 +25,39 @@ import com.google.android.gms.vision.barcode.Barcode;
  * reads barcodes.
  */
 public class MainActivity extends Activity implements View.OnClickListener {
+
+    private String package_name;
+    private Resources resources;
+
+    // @Override
+    // protected void onCreate(Bundle savedInstanceState) {
+    //     setContentView(getResourceId("layout/activity_main"));
+
+    //     // findViewById(getResourceId("id/read_barcode")).setOnClickListener(this);
+    //     super.onCreate(savedInstanceState);
+    // }
+
+    private int getResourceId(String typeAndName) {
+        if (package_name == null)
+            package_name = getApplication().getPackageName();
+        if (resources == null)
+            resources = getApplication().getResources();
+        return resources.getIdentifier(typeAndName, null, package_name);
+    }
+
+    // @Override
+    // public void onClick(View v) {
+
+    //     if (v.getId() == getResourceId("id/read_barcode")) {
+    //         Intent result = new Intent ();
+    //         result.putExtra("Value", "12346677");
+    //         setResult(Activity.RESULT_OK, result);
+    //         finish();
+    //     }
+
+    // }
+
+    // private CordovaInterface cordova;
 
     // use a compound button so either checkbox or switch widgets work.
     private CompoundButton autoFocus;
@@ -29,15 +71,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(getApplication().getResources().getIdentifier("activity_main", "layout",
+                getApplication().getPackageName()));
 
-        statusMessage = (TextView)findViewById(R.id.status_message);
-        barcodeValue = (TextView)findViewById(R.id.barcode_value);
+        statusMessage = (TextView) findViewById(getApplication().getResources().getIdentifier("status_message", "id",
+                getApplication().getPackageName()));
+        barcodeValue = (TextView) findViewById(getApplication().getResources().getIdentifier("barcode_value", "id",
+                getApplication().getPackageName()));
 
-        autoFocus = (CompoundButton) findViewById(R.id.auto_focus);
-        useFlash = (CompoundButton) findViewById(R.id.use_flash);
+        autoFocus = (CompoundButton) findViewById(getApplication().getResources().getIdentifier("auto_focus", "id",
+                getApplication().getPackageName()));
+        useFlash = (CompoundButton) findViewById(getApplication().getResources().getIdentifier("use_flash", "id",
+                getApplication().getPackageName()));
 
-        findViewById(R.id.read_barcode).setOnClickListener(this);
+        findViewById(getApplication().getResources().getIdentifier("read_barcode", "id",
+                getApplication().getPackageName())).setOnClickListener(this);
     }
 
     /**
@@ -47,7 +95,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
      */
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.read_barcode) {
+
+        if (v.getId() == getApplication().getResources().getIdentifier("read_barcode", "id",
+                getApplication().getPackageName())) {
             // launch barcode activity.
             Intent intent = new Intent(this, BarcodeCaptureActivity.class);
             intent.putExtra(BarcodeCaptureActivity.AutoFocus, autoFocus.isChecked());
@@ -85,20 +135,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
-                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
-                    statusMessage.setText(R.string.barcode_success);
-                    barcodeValue.setText(barcode.displayValue);
-                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
+                    String barcode = data.getParcelableExtra("Barcode");
+                    statusMessage.setText(getApplication().getResources().getIdentifier("barcode_success", "string",
+                            getApplication().getPackageName()));
+                    barcodeValue.setText(barcode);
+                    Log.d(TAG, "Barcode read: " + barcode);
                 } else {
-                    statusMessage.setText(R.string.barcode_failure);
+                    statusMessage.setText(getApplication().getResources().getIdentifier("barcode_failure", "string",
+                            getApplication().getPackageName()));
                     Log.d(TAG, "No barcode captured, intent data is null");
                 }
             } else {
-                statusMessage.setText(String.format(getString(R.string.barcode_error),
+                statusMessage.setText(String.format(
+                        getString(getApplication().getResources().getIdentifier("barcode_error", "string",
+                                getApplication().getPackageName())),
                         CommonStatusCodes.getStatusCodeString(resultCode)));
             }
-        }
-        else {
+        } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
