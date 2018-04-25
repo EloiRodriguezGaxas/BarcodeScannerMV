@@ -37,12 +37,6 @@
         <source-file src="src/android/ui/camera/GraphicOverlay.java" target-dir="src/com/example/sample/barcodeScannerMV/ui/camera" />
 		<source-file src="src/android/res/layout/activity_main.xml" target-dir="res/layout" />
 		<source-file src="src/android/res/layout/barcode_capture.xml" target-dir="res/layout" />
-        <source-file src="src/android/res/drawable/icon.png" target-dir="res/drawable"/>
-        <source-file src="src/android/res/drawable/icon.png" target-dir="res/drawable-hdpi"/>
-        <source-file src="src/android/res/drawable/icon.png" target-dir="res/drawable-ldpi"/>
-        <source-file src="src/android/res/drawable/icon.png" target-dir="res/drawable-mdpi"/>
-        <source-file src="src/android/res/drawable/icon.png" target-dir="res/drawable-xhdpi"/>
-        <source-file src="src/android/res/drawable/icon.png" target-dir="res/drawable-xxhdpi"/>
         <source-file src="src/android/res/values/dimens.xml" target-dir="res/values"/>
 
 		<framework src="com.android.support:support-v4:24.2.0" />

@@ -17,6 +17,8 @@ package com.example.sample.barcodeScannerMV.ui.camera;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -54,6 +56,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     private float mHeightScaleFactor = 1.0f;
     private int mFacing = CameraSource.CAMERA_FACING_BACK;
     private Set<Graphic> mGraphics = new HashSet();
+    private Paint paint = new Paint();
 
     /**
      * Base class for a custom graphics object to be rendered within the graphic overlay.  Subclass
@@ -198,6 +201,19 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        int mWidth = (this.getResources().getDisplayMetrics().widthPixels)/2;
+        int mHeight = (this.getResources().getDisplayMetrics().heightPixels)/2;
+
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(Color.GREEN);
+        canvas.drawRect(
+                mWidth - (float)(mWidth/1.2),
+                mHeight + (mHeight/4),
+                mWidth + (float)(mWidth/1.2),
+                mHeight - (mHeight/4),
+                paint
+        );
 
         synchronized (mLock) {
             if ((mPreviewWidth != 0) && (mPreviewHeight != 0)) {

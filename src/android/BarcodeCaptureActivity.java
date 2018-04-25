@@ -132,10 +132,11 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
                     
                     int mWidth = (getApplication().getResources().getDisplayMetrics().widthPixels)/2;
                     int mHeight = (getApplication().getResources().getDisplayMetrics().heightPixels)/2;
+                    mHeight += (mHeight/4);
 
                     checkForBarcode(mWidth, mHeight);
 
-                    handler.postDelayed(this, 500);
+                    handler.postDelayed(this, 50);
 
                 }
             }, 100);
@@ -383,11 +384,11 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
             float dx = x - barcode.getBoundingBox().centerX();
             float dy = y - barcode.getBoundingBox().centerY();
             float distance = (dx * dx) + (dy * dy); // actually squared distance
-            // if (distance < bestDistance) {
-            //     best = barcode.displayValue;
-            //     Log.d(TAG, "The closest barcode now: " + best);
-            //     bestDistance = distance;
-            // }
+            if (distance < bestDistance) {
+                best = barcode.displayValue;
+                Log.d(TAG, "The closest barcode now: " + best);
+                bestDistance = distance;
+            }
         }
 
         if (best != null) {
