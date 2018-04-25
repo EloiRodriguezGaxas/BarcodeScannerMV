@@ -375,19 +375,22 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
 
         for (BarcodeGraphic graphic : mGraphicOverlay.getGraphics()) {
             Barcode barcode = graphic.getBarcode();
-            if (barcode.getBoundingBox().contains((int) x, (int) y)) {
-                // Exact hit, no need to keep looking.
-                best = barcode.displayValue;
-                Log.d(TAG, "Exact tap barcode: " + best);
-                break;
-            }
-            float dx = x - barcode.getBoundingBox().centerX();
-            float dy = y - barcode.getBoundingBox().centerY();
-            float distance = (dx * dx) + (dy * dy); // actually squared distance
-            if (distance < bestDistance) {
-                best = barcode.displayValue;
-                Log.d(TAG, "The closest barcode now: " + best);
-                bestDistance = distance;
+            Log.d(TAG, "Barcode format: " + barcode.valueFormat + " QR value: " + barcode.QR_CODE);
+            if(this.isNumeric(barcode.displayValue)) {
+                if (barcode.getBoundingBox().contains((int) x, (int) y)) {
+                    // Exact hit, no need to keep looking.
+                    best = barcode.displayValue;
+                    Log.d(TAG, "Exact tap barcode: " + best);
+                    break;
+                }
+                float dx = x - barcode.getBoundingBox().centerX();
+                float dy = y - barcode.getBoundingBox().centerY();
+                float distance = (dx * dx) + (dy * dy); // actually squared distance
+                if (distance < bestDistance) {
+                    best = barcode.displayValue;
+                    Log.d(TAG, "The closest barcode now: " + best);
+                    bestDistance = distance;
+                }
             }
         }
 
@@ -399,6 +402,13 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
             return true;
         }
         return false;
+    }
+
+    private boolean isNumeric(String str) {
+        for (char c : str.toCharArray()) {
+            if (!Character.isDigit(c)) return false;
+        }
+        return true;
     }
 
     private class CaptureGestureListener extends GestureDetector.SimpleOnGestureListener {
