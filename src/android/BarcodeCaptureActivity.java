@@ -39,6 +39,11 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Toast;
 
+import android.view.KeyEvent;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -72,7 +77,10 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
     // intent request code to handle updating play services if needed.
     private static final int RC_HANDLE_GMS = 9001;
 
-    private boolean tapToCapture = false;
+    private boolean tapToCapture;
+
+    // Flash Status
+    private boolean flashStatus;
 
     // permission request codes need to be < 256
     private static final int RC_HANDLE_CAMERA_PERM = 2;
@@ -80,6 +88,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
     // constants used to pass extra data in the intent
     public static final String AutoFocus = "AutoFocus";
     public static final String UseFlash = "UseFlash";
+    public static final String TEXT_INSTRUCTIONS_STRING = "TextInstruction";
     public static final String BarcodeObject = "Barcode";
 
     private CameraSource mCameraSource;
@@ -111,6 +120,50 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
         // read parameters from the intent used to launch the activity.
         boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, false);
         boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
+        String paramStr = getIntent().getStringExtra(TEXT_INSTRUCTIONS_STRING);
+
+        // Convert params to JSONObject
+        JSONObject params;
+        try {
+            params = new JSONObject(paramStr);
+        } catch (JSONException e) {
+            params = new JSONObject();
+        }
+
+        // Flash instructions
+        String instr = params.optString("text_instructions");
+
+        // Tap barcode
+        try {
+            tapToCapture = Boolean.parseBoolean(params.optString("tap_barcode"));
+        } catch (Exception e) {
+            tapToCapture = false;
+        }
+
+        mGraphicOverlay.setTapBarcodes(tapToCapture);
+
+        // Draw barcodes opt
+        boolean drawBarcodes;
+
+        if (!tapToCapture) {
+            try {
+                drawBarcodes = Boolean.parseBoolean(params.optString("draw_barcodes"));
+            } catch (Exception e) {
+                drawBarcodes = true;
+            }
+        } else {
+            drawBarcodes = true;
+        }
+
+        mGraphicOverlay.setDrawBarcodes(drawBarcodes);
+
+        if (useFlash) {
+            this.flashStatus = true;
+        } else {
+            this.flashStatus = false;
+        }
+
+        Toast.makeText(this, instr, Toast.LENGTH_LONG).show();
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
@@ -124,15 +177,15 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
-        if(!tapToCapture) {
+        if (!tapToCapture) {
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    
-                    int mWidth = (getApplication().getResources().getDisplayMetrics().widthPixels)/2;
-                    int mHeight = (getApplication().getResources().getDisplayMetrics().heightPixels)/2;
-                    mHeight += (mHeight/4);
+
+                    int mWidth = (getApplication().getResources().getDisplayMetrics().widthPixels) / 2;
+                    int mHeight = (getApplication().getResources().getDisplayMetrics().heightPixels) / 2;
+                    mHeight += (mHeight / 4);
 
                     checkForBarcode(mWidth, mHeight);
 
@@ -376,7 +429,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
         for (BarcodeGraphic graphic : mGraphicOverlay.getGraphics()) {
             Barcode barcode = graphic.getBarcode();
             Log.d(TAG, "Barcode format: " + barcode.valueFormat + " QR value: " + barcode.QR_CODE);
-            if(this.isNumeric(barcode.displayValue)) {
+            if (this.isNumeric(barcode.displayValue)) {
                 if (barcode.getBoundingBox().contains((int) x, (int) y)) {
                     // Exact hit, no need to keep looking.
                     best = barcode.displayValue;
@@ -406,7 +459,8 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
 
     private boolean isNumeric(String str) {
         for (char c : str.toCharArray()) {
-            if (!Character.isDigit(c)) return false;
+            if (!Character.isDigit(c))
+                return false;
         }
         return true;
     }
@@ -419,6 +473,31 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
             else
                 return false;
         }
+    }
+
+    /**
+     * Use volume down to set on or off the flash mode
+     */
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+
+            if (this.flashStatus) {
+                mCameraSource.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                this.flashStatus = false;
+            } else {
+                mCameraSource.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                this.flashStatus = true;
+            }
+
+            return true;
+
+        } else {
+
+            return super.onKeyDown(keyCode, event);
+
+        }
+
     }
 
     private class ScaleListener implements ScaleGestureDetector.OnScaleGestureListener {

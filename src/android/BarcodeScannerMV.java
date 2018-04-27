@@ -37,9 +37,11 @@ public class BarcodeScannerMV extends CordovaPlugin {
         Context context = cordova.getActivity().getApplicationContext();
         this.scanCallbackContext = callbackContext;
         if (action.equals("coolMethod")) {
+            JSONObject params = args.optJSONObject(0);
             Intent intent = new Intent(context, BarcodeCaptureActivity.class);
             intent.putExtra(BarcodeCaptureActivity.AutoFocus, true);
             intent.putExtra(BarcodeCaptureActivity.UseFlash, false);
+            intent.putExtra(BarcodeCaptureActivity.TEXT_INSTRUCTIONS_STRING, params.toString());
             cordova.startActivityForResult(this, intent, SCAN_CODE);
             return true;
         }

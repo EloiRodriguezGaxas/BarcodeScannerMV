@@ -58,6 +58,9 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     private Set<Graphic> mGraphics = new HashSet();
     private Paint paint = new Paint();
 
+    private boolean drawBarcodes = true;
+    private boolean tapBarcodes;
+
     /**
      * Base class for a custom graphics object to be rendered within the graphic overlay.  Subclass
      * this and implement the {@link Graphic#draw(Canvas)} method to define the
@@ -126,6 +129,14 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
 
     public GraphicOverlay(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    public void setDrawBarcodes(boolean show) {
+        drawBarcodes = show;
+    }
+
+    public void setTapBarcodes(boolean tap) {
+        tapBarcodes = tap;
     }
 
     /**
@@ -202,28 +213,30 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        int mWidth = (this.getResources().getDisplayMetrics().widthPixels)/2;
-        int mHeight = (this.getResources().getDisplayMetrics().heightPixels)/2;
+        if (!tapBarcodes) {
 
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.GREEN);
-        canvas.drawRect(
-                mWidth - (float)(mWidth/1.2),
-                mHeight + (mHeight/4),
-                mWidth + (float)(mWidth/1.2),
-                mHeight - (mHeight/4),
-                paint
-        );
+            int mWidth = (this.getResources().getDisplayMetrics().widthPixels) / 2;
+            int mHeight = (this.getResources().getDisplayMetrics().heightPixels) / 2;
 
-        synchronized (mLock) {
-            if ((mPreviewWidth != 0) && (mPreviewHeight != 0)) {
-                mWidthScaleFactor = (float) canvas.getWidth() / (float) mPreviewWidth;
-                mHeightScaleFactor = (float) canvas.getHeight() / (float) mPreviewHeight;
-            }
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setColor(Color.GREEN);
+            canvas.drawRect(mWidth - (float) (mWidth / 1.2), mHeight + (mHeight / 4), mWidth + (float) (mWidth / 1.2),
+                    mHeight - (mHeight / 4), paint);
+                    
+        }
 
-            for (Graphic graphic : mGraphics) {
-                graphic.draw(canvas);
+        if (drawBarcodes) {
+            synchronized (mLock) {
+                if ((mPreviewWidth != 0) && (mPreviewHeight != 0)) {
+                    mWidthScaleFactor = (float) canvas.getWidth() / (float) mPreviewWidth;
+                    mHeightScaleFactor = (float) canvas.getHeight() / (float) mPreviewHeight;
+                }
+
+                for (Graphic graphic : mGraphics) {
+                    graphic.draw(canvas);
+                }
             }
         }
+
     }
 }
