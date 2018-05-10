@@ -9,7 +9,7 @@ The flash can be turned on and turned off with the volumen button.
 
 ## Installation
 ```
-cordova plugin add https://github.com/EloiRodriguezGaxas/BarcodeScannerMV
+cordova plugin add https://github.com/EloiRodriguezGaxas/BarcodeScannerMV.git
 ```
 
 ## Usage
